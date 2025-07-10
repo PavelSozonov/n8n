@@ -1,0 +1,51 @@
+image:
+  repository: registry.internal.local/n8n
+  tag: 1.44.0
+  pullPolicy: IfNotPresent
+
+postgresql:
+  enabled: true
+  image:
+    registry: registry.internal.local
+    repository: bitnami/postgresql
+    tag: 15.2.0
+  auth:
+    username: n8n
+    password: n8npass
+    database: n8n
+
+valkey:
+  enabled: true
+  image:
+    registry: registry.internal.local
+    repository: bitnami/valkey
+    tag: 7.2.0
+  auth:
+    password: redispass
+
+n8n:
+  main:
+    config:
+      executions:
+        mode: queue
+      queue:
+        bull:
+          redis:
+            host: valkey-master
+            port: 6379
+    secret:
+      db:
+        postgresdb:
+          password: n8npass
+    extraEnv:
+      OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: "true"
+  worker:
+    enabled: true
+    replicaCount: 3
+    concurrency: 5
+
+nodes:
+  installation:
+    packages:
+      - name: n8n-nodes-confluence
+        version: latest

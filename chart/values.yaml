@@ -1,0 +1,27 @@
+# Default values for n8n-airgap
+image:
+  repository: n8nio/n8n
+  tag: 1.44.0
+  pullPolicy: IfNotPresent
+
+postgresql:
+  enabled: true
+  auth:
+    username: n8n
+    password: n8n
+    database: n8n
+
+valkey:
+  enabled: true
+  auth:
+    password: ""
+
+n8n:
+  main:
+    config:
+      executions:
+        mode: "regular"
+    secret: {}
+  worker:
+    enabled: false
+    concurrency: 10
