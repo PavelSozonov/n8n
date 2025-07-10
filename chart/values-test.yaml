@@ -14,30 +14,35 @@ postgresql:
     password: n8npass
     database: n8n
 
-redis:
+valkey:
   enabled: true
   image:
     registry: registry.internal.local
-    repository: bitnami/redis
+    repository: bitnami/valkey
     tag: 7.2.0
   auth:
     password: redispass
 
-worker:
-  enabled: true
-  count: 3
-  concurrency: 5
-  mode: queue
-
-config:
-  executions:
-    mode: "queue"
-  offloadManualExecutionsToWorkers: true
-  queue:
-    bull:
-      redis:
-        host: redis-master
-        port: 6379
+n8n:
+  main:
+    config:
+      executions:
+        mode: queue
+      queue:
+        bull:
+          redis:
+            host: valkey-master
+            port: 6379
+    secret:
+      db:
+        postgresdb:
+          password: n8npass
+    extraEnv:
+      OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: "true"
+  worker:
+    enabled: true
+    replicaCount: 3
+    concurrency: 5
 
 nodes:
   installation:

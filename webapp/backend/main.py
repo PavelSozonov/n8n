@@ -13,6 +13,7 @@ LDAP_SEARCH_BASE = os.getenv("LDAP_SEARCH_BASE", "dc=example,dc=com")
 N8N_URL = os.getenv("N8N_URL", "https://n8n.local")
 N8N_BASIC_USER = os.getenv("N8N_BASIC_USER", "admin")
 N8N_BASIC_PASS = os.getenv("N8N_BASIC_PASS", "admin")
+VERIFY_SSL = os.getenv("VERIFY_SSL", "true").lower() == "true"
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 async def invite(username: str = Form(...), password: str = Form(...)):
     server = Server(LDAP_SERVER, get_info=ALL)
     try:
-        conn = Connection(server, user=f"{LDAP_USER_DN}\n{username}", password=password, authentication=NTLM)
+        conn = Connection(server, user=f"{LDAP_USER_DN}\\{username}", password=password, authentication=NTLM)
         if not conn.bind():
             logger.warning("LDAP authentication failed for %s", username)
             raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -38,7 +39,13 @@ async def invite(username: str = Form(...), password: str = Form(...)):
 
     payload = {"email": email, "role": "member"}
     try:
-        resp = requests.post(f"{N8N_URL}/admin/users/invite", json=payload, auth=(N8N_BASIC_USER, N8N_BASIC_PASS), verify=False)
+        resp = requests.post(
+            f"{N8N_URL}/admin/users/invite",
+            json=payload,
+            auth=(N8N_BASIC_USER, N8N_BASIC_PASS),
+            verify=VERIFY_SSL,
+            timeout=10,
+        )
         resp.raise_for_status()
     except Exception as e:
         logger.exception("n8n API call failed")

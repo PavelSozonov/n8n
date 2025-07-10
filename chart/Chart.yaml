@@ -1,13 +1,18 @@
 apiVersion: v2
-name: n8n
-version: 0.1.0
-description: Unofficial packaging of the n8n chart for air-gapped usage.
+name: n8n-airgap
+version: 0.1.1
+description: Wrapper chart to deploy n8n in air-gapped environments.
 type: application
-appVersion: "1.44.0"
+
 dependencies:
+  - name: n8n
+    version: 1.0.11
+    repository: https://8gears.github.io/n8n-helm-chart
   - name: postgresql
-    version: 12.1.5
-    repository: https://charts.bitnami.com/bitnami
-  - name: redis
-    version: 17.3.2
-    repository: https://charts.bitnami.com/bitnami
+    version: 16.7.16
+    repository: oci://registry-1.docker.io/bitnamicharts
+    condition: postgresql.enabled
+  - name: valkey
+    version: 2.4.7
+    repository: oci://registry-1.docker.io/bitnamicharts
+    condition: valkey.enabled

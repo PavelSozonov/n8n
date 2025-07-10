@@ -25,6 +25,7 @@ docker build -t registry.internal.local/n8n-backend ./backend
 4. Configure environment variables for the backend:
    - `LDAP_SERVER`, `LDAP_USER_DN`, `LDAP_SEARCH_BASE`
    - `N8N_URL`, `N8N_BASIC_USER`, `N8N_BASIC_PASS`
+   - `VERIFY_SSL` (set to `false` to disable TLS verification)
 
 ## Security Notes
 

@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "n8n.fullname" . }}
-data:
-  EXECUTIONS_MODE: {{ .Values.config.executions.mode | quote }}
-  QUEUE_BULL_REDIS_HOST: {{ .Values.redis.host | default "" | quote }}
-  QUEUE_BULL_REDIS_PORT: {{ .Values.redis.port | default "" | quote }}

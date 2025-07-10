@@ -1,3 +1,4 @@
+# Default values for n8n-airgap
 image:
   repository: n8nio/n8n
   tag: 1.44.0
@@ -10,18 +11,17 @@ postgresql:
     password: n8n
     database: n8n
 
-redis:
+valkey:
   enabled: true
-  auth: {}
+  auth:
+    password: ""
 
-worker:
-  enabled: false
-  count: 1
-  concurrency: 10
-
-config:
-  executions:
-    mode: "regular"
-  queue:
-    bull:
-      redis: {}
+n8n:
+  main:
+    config:
+      executions:
+        mode: "regular"
+    secret: {}
+  worker:
+    enabled: false
+    concurrency: 10
