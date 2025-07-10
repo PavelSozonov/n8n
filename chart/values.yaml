@@ -1,0 +1,27 @@
+image:
+  repository: n8nio/n8n
+  tag: 1.44.0
+  pullPolicy: IfNotPresent
+
+postgresql:
+  enabled: true
+  auth:
+    username: n8n
+    password: n8n
+    database: n8n
+
+redis:
+  enabled: true
+  auth: {}
+
+worker:
+  enabled: false
+  count: 1
+  concurrency: 10
+
+config:
+  executions:
+    mode: "regular"
+  queue:
+    bull:
+      redis: {}

@@ -1,0 +1,13 @@
+apiVersion: v2
+name: n8n
+version: 0.1.0
+description: Unofficial packaging of the n8n chart for air-gapped usage.
+type: application
+appVersion: "1.44.0"
+dependencies:
+  - name: postgresql
+    version: 12.1.5
+    repository: https://charts.bitnami.com/bitnami
+  - name: redis
+    version: 17.3.2
+    repository: https://charts.bitnami.com/bitnami

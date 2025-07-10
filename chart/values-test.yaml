@@ -1,0 +1,46 @@
+image:
+  repository: registry.internal.local/n8n
+  tag: 1.44.0
+  pullPolicy: IfNotPresent
+
+postgresql:
+  enabled: true
+  image:
+    registry: registry.internal.local
+    repository: bitnami/postgresql
+    tag: 15.2.0
+  auth:
+    username: n8n
+    password: n8npass
+    database: n8n
+
+redis:
+  enabled: true
+  image:
+    registry: registry.internal.local
+    repository: bitnami/redis
+    tag: 7.2.0
+  auth:
+    password: redispass
+
+worker:
+  enabled: true
+  count: 3
+  concurrency: 5
+  mode: queue
+
+config:
+  executions:
+    mode: "queue"
+  offloadManualExecutionsToWorkers: true
+  queue:
+    bull:
+      redis:
+        host: redis-master
+        port: 6379
+
+nodes:
+  installation:
+    packages:
+      - name: n8n-nodes-confluence
+        version: latest
